@@ -3,7 +3,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Save, Type, Info, Trash2, Palette, User, Calendar, Cake, Pencil, Check, X, Share2 } from 'lucide-react';
 import { Profile, CustomCategory, ALL_AVATARS, AVATARS_MALE, AVATARS_FEMALE, accentColors, DEFAULT_PROFILE } from '@/lib/types';
-import { setProfile, addCustomCategory, deleteCustomCategory, updateCustomCategory } from '@/lib/storage';
+import { setProfile, deleteCustomCategory, updateCustomCategory } from '@/lib/storage';
 import ConfirmDialog from './ConfirmDialog';
 import AppInfoDialog from './AppInfoDialog';
 
@@ -64,9 +64,6 @@ export default function SettingsPage({
   const [saved, setSaved] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showAppInfo, setShowAppInfo] = useState(false);
-  const [addCustomType, setAddCustomType] = useState<'income' | 'expense'>('expense');
-  const [newCatName, setNewCatName] = useState('');
-  const [newCatIcon, setNewCatIcon] = useState('');
   const [editingCatId, setEditingCatId] = useState<string | null>(null);
   const [editCatName, setEditCatName] = useState('');
   const [editCatIcon, setEditCatIcon] = useState('');
@@ -98,20 +95,6 @@ export default function SettingsPage({
     setLocalProfile({ ...DEFAULT_PROFILE });
     setShowResetConfirm(false);
   }, [onResetAll]);
-
-  const handleAddCustomCategory = useCallback(() => {
-    if (!newCatName.trim()) return;
-    const newCat: CustomCategory = {
-      id: Date.now().toString(),
-      type: addCustomType,
-      name: newCatName.trim(),
-      icon: newCatIcon || '🎯',
-    };
-    const updated = addCustomCategory(newCat);
-    onCustomCategoriesChange(updated);
-    setNewCatName('');
-    setNewCatIcon('');
-  }, [newCatName, newCatIcon, addCustomType, onCustomCategoriesChange]);
 
   const handleDeleteCustomCategory = useCallback((id: string) => {
     const updated = deleteCustomCategory(id);
@@ -400,52 +383,6 @@ export default function SettingsPage({
           <h3 className="text-white font-medium text-sm">Custom Categories</h3>
         </div>
 
-        {/* Add custom category */}
-        <div className="flex gap-2 mb-3">
-          <button
-            onClick={() => setAddCustomType('income')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-              addCustomType === 'income'
-                ? 'bg-[#22C55E]/15 text-[#22C55E] border border-[#22C55E]/30'
-                : 'bg-[#0F111A] text-[#A1A1AA] border border-transparent'
-            }`}
-          >
-            Income
-          </button>
-          <button
-            onClick={() => setAddCustomType('expense')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-              addCustomType === 'expense'
-                ? 'bg-[#EF4444]/15 text-[#EF4444] border border-[#EF4444]/30'
-                : 'bg-[#0F111A] text-[#A1A1AA] border border-transparent'
-            }`}
-          >
-            Expense
-          </button>
-        </div>
-        <div className="flex gap-2 mb-5">
-          <input
-            type="text"
-            placeholder="Category name"
-            value={newCatName}
-            onChange={(e) => setNewCatName(e.target.value)}
-            className="flex-1 bg-[#0F111A] rounded-lg px-3 py-2 text-white text-sm outline-none border border-white/[0.06] focus:border-[#4DA3FF]/40 placeholder:text-white/30 transition-colors"
-          />
-          <input
-            type="text"
-            placeholder="🎯"
-            value={newCatIcon}
-            onChange={(e) => setNewCatIcon(e.target.value)}
-            className="w-14 bg-[#0F111A] rounded-lg px-2 py-2 text-white text-sm outline-none border border-white/[0.06] focus:border-[#4DA3FF]/40 placeholder:text-white/30 transition-colors text-center"
-          />
-          <button
-            onClick={handleAddCustomCategory}
-            className="px-4 py-2 bg-[#4DA3FF] text-white text-sm font-medium rounded-lg hover:bg-[#4DA3FF]/80 transition-colors active:scale-95"
-          >
-            Add
-          </button>
-        </div>
-
         {/* Income Custom Categories */}
         {incomeCategories.length > 0 && (
           <div className="mb-4">
@@ -592,7 +529,7 @@ export default function SettingsPage({
       {/* 1. Save Changes */}
       <button
         onClick={handleSave}
-        className="w-full py-3.5 rounded-2xl text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+        className="w-full py-3.5 rounded-2xl text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98] mt-2"
         style={{ background: `linear-gradient(135deg, ${accent.main}, ${accent.main}cc)`, boxShadow: `0 4px 20px ${accent.glow}` }}
       >
         <Save size={16} />
@@ -600,9 +537,10 @@ export default function SettingsPage({
       </button>
 
       {/* 2. Reset All Data */}
+      <div className="mt-6">
       <button
         onClick={() => setShowResetConfirm(true)}
-        className="w-full bg-[#1A1F2E] rounded-2xl p-4 border border-[#EF4444]/10 mb-4 flex items-center gap-3 hover:bg-[#EF4444]/5 transition-colors"
+        className="w-full bg-[#1A1F2E] rounded-2xl p-4 border border-[#EF4444]/10 flex items-center gap-3 hover:bg-[#EF4444]/5 transition-colors"
       >
         <div className="w-10 h-10 rounded-xl bg-[#EF4444]/15 flex items-center justify-center">
           <Trash2 size={18} className="text-[#EF4444]" />
@@ -612,6 +550,7 @@ export default function SettingsPage({
           <p className="text-[#A1A1AA] text-xs">Clear all transactions and settings</p>
         </div>
       </button>
+      </div>
 
       {/* 3. Share App */}
       <button

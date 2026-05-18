@@ -57,16 +57,25 @@ export default function HomePage({ transactions, profile, onEdit, onDelete, onNa
         </button>
       </div>
 
-      {/* Balance Card - Glassmorphism */}
-      <div className="glass-card rounded-2xl p-5 mb-5 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-36 h-36 bg-white/[0.03] rounded-full -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-28 h-28 bg-white/[0.03] rounded-full translate-y-1/2 -translate-x-1/2" />
+      {/* Balance Card - Glassmorphism with gradient */}
+      <div className="rounded-2xl p-5 mb-5 relative overflow-hidden border border-white/[0.08]" style={{ background: `linear-gradient(135deg, ${accent.main}18 0%, #1A1F2E 40%, #1A1F2E 60%, ${accent.main}10 100%)` }}>
+        {/* Decorative circles */}
+        <div className="absolute top-0 right-0 w-40 h-40 rounded-full -translate-y-1/2 translate-x-1/2" style={{ background: `radial-gradient(circle, ${accent.main}12 0%, transparent 70%)` }} />
+        <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full translate-y-1/2 -translate-x-1/2" style={{ background: `radial-gradient(circle, ${accent.main}10 0%, transparent 70%)` }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full" style={{ background: `radial-gradient(circle, ${accent.main}06 0%, transparent 60%)` }} />
+        {/* Small sparkle dots */}
+        <div className="absolute top-4 right-16 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accent.main, opacity: 0.3 }} />
+        <div className="absolute top-8 right-8 w-1 h-1 rounded-full" style={{ backgroundColor: accent.main, opacity: 0.2 }} />
+        <div className="absolute bottom-6 left-12 w-1 h-1 rounded-full" style={{ backgroundColor: accent.main, opacity: 0.25 }} />
+        <div className="absolute top-12 left-20 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#8B5CF6', opacity: 0.2 }} />
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-1">
-            <Wallet size={16} className="text-[#A1A1AA]" />
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${accent.main}20` }}>
+              <Wallet size={16} style={{ color: accent.main }} />
+            </div>
             <span className="text-[#A1A1AA] text-sm">Total Balance</span>
           </div>
-          <p className="text-3xl font-bold text-white mb-4">
+          <p className="text-3xl font-bold text-white mt-2">
             {formatCurrency(stats.balance)}
           </p>
         </div>
