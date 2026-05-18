@@ -66,6 +66,7 @@ export default function SettingsPage({
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showAppInfo, setShowAppInfo] = useState(false);
   const [showInstallGuide, setShowInstallGuide] = useState(false);
+  const [showShareOptions, setShowShareOptions] = useState(false);
   const [editingCatId, setEditingCatId] = useState<string | null>(null);
   const [editCatName, setEditCatName] = useState('');
   const [editCatIcon, setEditCatIcon] = useState('');
@@ -555,38 +556,89 @@ export default function SettingsPage({
       </div>
 
       {/* 3. Share App */}
-      <button
-        onClick={async () => {
-          if (typeof navigator !== 'undefined' && navigator.share) {
-            try {
-              await navigator.share({
-                title: 'Money Secured - Track Your Money',
-                text: 'Money Secured app use karo! Apni income aur expense easily track karo. Offline app hai, koi login nahi chahiye!\n\n📱 Install kaise kare:\nAndroid: Chrome > 3 dots > Add to Home Screen\niPhone: Safari > Share > Add to Home Screen\n\n🔗 App Link:',
-                url: 'https://money-secured.vercel.app/',
-              });
-            } catch (err) {
-              // User cancelled or share failed
-            }
-          } else {
-            // Fallback: copy link to clipboard
-            try {
-              await navigator.clipboard.writeText('https://money-secured.vercel.app/');
-              alert('App link copied! Share karo apne dosto ke saath.\n\nhttps://money-secured.vercel.app/');
-            } catch {
-              alert('Sharing not supported in this browser.');
-            }
-          }
-        }}
-        className="w-full bg-[#1A1F2E] rounded-2xl p-4 border border-white/[0.04] mb-4 flex items-center gap-3 hover:bg-white/[0.02] transition-colors"
-      >
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${accent.main}15` }}>
-          <Share2 size={18} style={{ color: accent.main }} />
-        </div>
-        <div className="text-left">
-          <p className="text-white font-medium text-sm">Share App</p>
-          <p className="text-[#A1A1AA] text-xs">Share with friends & family</p>
-        </div>
-      </button>
+      <div className="relative">
+        <button
+          onClick={() => setShowShareOptions(!showShareOptions)}
+          className="w-full bg-[#1A1F2E] rounded-2xl p-4 border border-white/[0.04] mb-4 flex items-center gap-3 hover:bg-white/[0.02] transition-colors"
+        >
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${accent.main}15` }}>
+            <Share2 size={18} style={{ color: accent.main }} />
+          </div>
+          <div className="text-left flex-1">
+            <p className="text-white font-medium text-sm">Share App</p>
+            <p className="text-[#A1A1AA] text-xs">Share with friends & family</p>
+          </div>
+          <span className="text-[#A1A1AA] text-xs">▼</span>
+        </button>
+
+        {/* Share Options Dropdown */}
+        {showShareOptions && (
+          <div className="absolute left-0 right-0 top-full -mt-2 z-20">
+            <div className="bg-[#1A1F2E] rounded-2xl border border-white/[0.08] shadow-2xl overflow-hidden">
+              <button
+                onClick={async () => {
+                  setShowShareOptions(false);
+                  if (typeof navigator !== 'undefined' && navigator.share) {
+                    try {
+                      await navigator.share({
+                        title: 'Money Secured - Track Your Money',
+                        text: 'Money Secured app use karo! Apni income aur expense easily track karo. Offline app hai, koi login nahi chahiye!\n\n📱 Install kaise kare:\nAndroid: Chrome > 3 dots > Add to Home Screen\niPhone: Safari > Share > Add to Home Screen\n\n🔗 App Link:',
+                        url: 'https://money-secured.vercel.app/',
+                      });
+                    } catch (err) {}
+                  } else {
+                    try {
+                      await navigator.clipboard.writeText('https://money-secured.vercel.app/');
+                      alert('App link copied!\n\nhttps://money-secured.vercel.app/');
+                    } catch {
+                      alert('Sharing not supported in this browser.');
+                    }
+                  }
+                }}
+                className="w-full px-4 py-3.5 flex items-center gap-3 hover:bg-white/[0.04] transition-colors border-b border-white/[0.04]"
+              >
+                <div className="w-8 h-8 rounded-lg bg-[#4DA3FF]/15 flex items-center justify-center">
+                  <Share2 size={15} className="text-[#4DA3FF]" />
+                </div>
+                <div className="text-left">
+                  <p className="text-white text-sm font-medium">Share App Link</p>
+                  <p className="text-[#A1A1AA] text-[10px]">Simple link share karo</p>
+                </div>
+              </button>
+              <button
+                onClick={async () => {
+                  setShowShareOptions(false);
+                  if (typeof navigator !== 'undefined' && navigator.share) {
+                    try {
+                      await navigator.share({
+                        title: 'Money Secured - Install Now!',
+                        text: 'Money Secured - Track income & expenses app! Poster dekho aur install karo.\n\n🔗 ',
+                        url: 'https://money-secured.vercel.app/share',
+                      });
+                    } catch (err) {}
+                  } else {
+                    try {
+                      await navigator.clipboard.writeText('https://money-secured.vercel.app/share');
+                      alert('Share link copied! Poster ke saath share karo.\n\nhttps://money-secured.vercel.app/share');
+                    } catch {
+                      alert('Sharing not supported in this browser.');
+                    }
+                  }
+                }}
+                className="w-full px-4 py-3.5 flex items-center gap-3 hover:bg-white/[0.04] transition-colors"
+              >
+                <div className="w-8 h-8 rounded-lg bg-[#8B5CF6]/15 flex items-center justify-center">
+                  <span className="text-sm">🖼️</span>
+                </div>
+                <div className="text-left">
+                  <p className="text-white text-sm font-medium">Share with Poster</p>
+                  <p className="text-[#A1A1AA] text-[10px]">Poster + features + install guide</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* 4. Install Guide */}
       <button
