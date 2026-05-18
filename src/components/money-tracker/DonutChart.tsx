@@ -6,6 +6,7 @@ interface DonutSegment {
   value: number;
   color: string;
   label: string;
+  icon: string;
 }
 
 interface DonutChartProps {
@@ -20,7 +21,7 @@ export default function DonutChart({
   segments,
   size = 200,
   strokeWidth = 28,
-  centerAmount = '₹0',
+  centerAmount = '₹ 0',
   centerLabel = 'Total',
 }: DonutChartProps) {
   const radius = (size - strokeWidth) / 2;
@@ -49,6 +50,7 @@ export default function DonutChart({
               const percentage = segment.value / total;
               const offset = circumference * (1 - percentage);
               const rotation = (cumulativeOffset / total) * 360 - 90;
+              const gap = segments.length > 1 ? 2 : 0;
 
               cumulativeOffset += segment.value;
 
@@ -60,10 +62,10 @@ export default function DonutChart({
                   r={radius}
                   fill="none"
                   stroke={segment.color}
-                  strokeWidth={strokeWidth}
+                  strokeWidth={strokeWidth - gap}
                   strokeDasharray={circumference}
                   strokeDashoffset={offset}
-                  strokeLinecap="round"
+                  strokeLinecap="butt"
                   transform={`rotate(${rotation} ${center} ${center})`}
                   className="donut-segment"
                   style={
@@ -78,8 +80,8 @@ export default function DonutChart({
         </svg>
         {/* Center text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-white font-bold text-lg">{centerAmount}</span>
-          <span className="text-[#9ca3af] text-xs">{centerLabel}</span>
+          <span className="text-white font-bold text-lg leading-tight">{centerAmount}</span>
+          <span className="text-[#A1A1AA] text-[11px]">{centerLabel}</span>
         </div>
       </div>
       {/* Legend */}
@@ -87,10 +89,12 @@ export default function DonutChart({
         {segments.map((segment, index) => (
           <div key={index} className="flex items-center gap-1.5 text-xs">
             <div
-              className="w-2.5 h-2.5 rounded-full"
+              className="w-2.5 h-2.5 rounded-full shrink-0"
               style={{ backgroundColor: segment.color }}
             />
-            <span className="text-[#9ca3af]">{segment.label}</span>
+            <span className="text-[#A1A1AA]">
+              {segment.icon} {segment.label}
+            </span>
           </div>
         ))}
       </div>

@@ -1,21 +1,30 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins, Inter, Nunito } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const poppins = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const nunito = Nunito({
+  variable: "--font-nunito",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Money Tracker",
-  description: "Track your finances, manage expenses and income with a beautiful dark-themed money tracker app.",
-  keywords: ["Money Tracker", "Finance", "Expense Tracker", "Budget"],
+  title: "Money Secured",
+  description: "Money Secured - A modern finance app to track your income and expenses with powerful analytics.",
+  keywords: ["Money Secured", "Finance", "Expense Tracker", "Budget", "Money Manager"],
   icons: {
     icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
   },
@@ -26,7 +35,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#0a0a12",
+  themeColor: "#0F111A",
 };
 
 export default function RootLayout({
@@ -37,7 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0a0a12] text-white`}
+        className={`${poppins.variable} ${inter.variable} ${nunito.variable} antialiased bg-[#0F111A] text-white`}
       >
         {children}
       </body>

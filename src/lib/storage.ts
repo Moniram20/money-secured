@@ -1,14 +1,16 @@
 import {
   Transaction,
   Profile,
+  CustomCategory,
   DEFAULT_PROFILE,
   SAMPLE_TRANSACTIONS,
   EXPENSE_CATEGORIES,
   INCOME_CATEGORIES,
 } from './types';
 
-const TRANSACTIONS_KEY = 'money_tracker_transactions';
-const PROFILE_KEY = 'money_tracker_profile';
+const TRANSACTIONS_KEY = 'money_secured_transactions';
+const PROFILE_KEY = 'money_secured_profile';
+const CUSTOM_CATEGORIES_KEY = 'money_secured_custom_categories';
 
 function isLocalStorageAvailable(): boolean {
   try {
@@ -48,6 +50,14 @@ export function addTransaction(transaction: Transaction): Transaction[] {
   return transactions;
 }
 
+export function updateTransaction(updated: Transaction): Transaction[] {
+  const transactions = getTransactions().map((t) =>
+    t.id === updated.id ? updated : t
+  );
+  setTransactions(transactions);
+  return transactions;
+}
+
 export function deleteTransaction(id: string): Transaction[] {
   const transactions = getTransactions().filter((t) => t.id !== id);
   setTransactions(transactions);
@@ -63,7 +73,7 @@ export function getProfile(): Profile {
       setProfile(DEFAULT_PROFILE);
       return DEFAULT_PROFILE;
     }
-    return JSON.parse(stored);
+    return { ...DEFAULT_PROFILE, ...JSON.parse(stored) };
   } catch {
     return DEFAULT_PROFILE;
   }
@@ -74,13 +84,58 @@ export function setProfile(profile: Profile): void {
   localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
 }
 
+// Custom Categories
+export function getCustomCategories(): CustomCategory[] {
+  if (!isLocalStorageAvailable()) return [];
+  try {
+    const stored = localStorage.getItem(CUSTOM_CATEGORIES_KEY);
+    if (!stored) return [];
+    return JSON.parse(stored);
+  } catch {
+    return [];
+  }
+}
+
+export function addCustomCategory(category: CustomCategory): CustomCategory[] {
+  const categories = getCustomCategories();
+  categories.push(category);
+  if (isLocalStorageAvailable()) {
+    localStorage.setItem(CUSTOM_CATEGORIES_KEY, JSON.stringify(categories));
+  }
+  return categories;
+}
+
+export function deleteCustomCategory(id: string): CustomCategory[] {
+  const categories = getCustomCategories().filter((c) => c.id !== id);
+  if (isLocalStorageAvailable()) {
+    localStorage.setItem(CUSTOM_CATEGORIES_KEY, JSON.stringify(categories));
+  }
+  return categories;
+}
+
+export function resetAllData(): void {
+  if (!isLocalStorageAvailable()) return;
+  localStorage.removeItem(TRANSACTIONS_KEY);
+  localStorage.removeItem(PROFILE_KEY);
+  localStorage.removeItem(CUSTOM_CATEGORIES_KEY);
+}
+
 // Helpers
 export function formatCurrency(amount: number): string {
-  return '₹' + amount.toLocaleString('en-IN');
+  return '₹ ' + amount.toLocaleString('en-IN');
 }
 
 export function formatDate(dateString: string): string {
   const date = new Date(dateString);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const txDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const diffDays = Math.floor((today.getTime() - txDate.getTime()) / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) return 'Today';
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 7) return `${diffDays} days ago`;
+
   return date.toLocaleDateString('en-IN', {
     day: '2-digit',
     month: 'short',
@@ -104,5 +159,5 @@ export function getCategoryIcon(category: string): string {
 
 export function getCategoryColor(category: string): string {
   const found = ALL_CATEGORIES.find((c) => c.name === category);
-  return found?.color ?? '#9ca3af';
+  return found?.color ?? '#A1A1AA';
 }
