@@ -62,7 +62,33 @@ export default function RootLayout({
             __html: `
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js').catch(function(){});
+                  navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                    // Check for updates every 60 seconds
+                    setInterval(function() {
+                      reg.update();
+                    }, 60000);
+
+                    // If a new SW is waiting, tell it to activate and reload page
+                    reg.addEventListener('updatefound', function() {
+                      var newWorker = reg.installing;
+                      newWorker.addEventListener('statechange', function() {
+                        if (newWorker.state === 'activated') {
+                          // New service worker activated, reload the page
+                          window.location.reload();
+                        }
+                      });
+                    });
+
+                    // If already has a waiting worker, skip waiting and reload
+                    if (reg.waiting) {
+                      reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+                      reg.waiting.addEventListener('statechange', function() {
+                        if (this.state === 'activated') {
+                          window.location.reload();
+                        }
+                      });
+                    }
+                  }).catch(function(){});
                 });
               }
             `,
