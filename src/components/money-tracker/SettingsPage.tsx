@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
-import { Save, Type, Info, Trash2, Palette, User } from 'lucide-react';
-import { Profile, CustomCategory, ALL_AVATARS, AVATARS_MALE, AVATARS_FEMALE, accentColors } from '@/lib/types';
-import { setProfile, addCustomCategory, deleteCustomCategory } from '@/lib/storage';
+import React, { useState, useCallback, useMemo } from 'react';
+import { Save, Type, Info, Trash2, Palette, User, Calendar, Cake, Pencil, Check, X } from 'lucide-react';
+import { Profile, CustomCategory, ALL_AVATARS, AVATARS_MALE, AVATARS_FEMALE, accentColors, DEFAULT_PROFILE } from '@/lib/types';
+import { setProfile, addCustomCategory, deleteCustomCategory, updateCustomCategory } from '@/lib/storage';
 import ConfirmDialog from './ConfirmDialog';
 import AppInfoDialog from './AppInfoDialog';
 
@@ -12,7 +12,44 @@ interface SettingsPageProps {
   customCategories: CustomCategory[];
   onProfileUpdate: (profile: Profile) => void;
   onCustomCategoriesChange: (cats: CustomCategory[]) => void;
+  onUpdateCustomCategory: (id: string, updates: Partial<CustomCategory>) => void;
   onResetAll: () => void;
+}
+
+function getDaysUntilNextBirthday(dob: string): number | null {
+  if (!dob) return null;
+  try {
+    const birthDate = new Date(dob);
+    if (isNaN(birthDate.getTime())) return null;
+
+    const today = new Date();
+    const todayYear = today.getFullYear();
+    const todayMonth = today.getMonth();
+    const todayDate = today.getDate();
+
+    let nextBirthdayYear = todayYear;
+    let birthdayThisYear = new Date(nextBirthdayYear, birthDate.getMonth(), birthDate.getDate());
+
+    // If birthday already passed this year, use next year
+    if (
+      birthDate.getMonth() < todayMonth ||
+      (birthDate.getMonth() === todayMonth && birthDate.getDate() < todayDate)
+    ) {
+      nextBirthdayYear = todayYear + 1;
+      birthdayThisYear = new Date(nextBirthdayYear, birthDate.getMonth(), birthDate.getDate());
+    }
+
+    // If today is the birthday
+    if (birthDate.getMonth() === todayMonth && birthDate.getDate() === todayDate) {
+      return 0;
+    }
+
+    const diffTime = birthdayThisYear.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  } catch {
+    return null;
+  }
 }
 
 export default function SettingsPage({
@@ -20,15 +57,34 @@ export default function SettingsPage({
   customCategories,
   onProfileUpdate,
   onCustomCategoriesChange,
+  onUpdateCustomCategory,
   onResetAll,
 }: SettingsPageProps) {
-  const [localProfile, setLocalProfile] = useState<Profile>({ ...profile });
+  const [localProfile, setLocalProfile] = useState<Profile>(() => ({ ...profile }));
   const [saved, setSaved] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showAppInfo, setShowAppInfo] = useState(false);
   const [addCustomType, setAddCustomType] = useState<'income' | 'expense'>('expense');
   const [newCatName, setNewCatName] = useState('');
   const [newCatIcon, setNewCatIcon] = useState('');
+  const [editingCatId, setEditingCatId] = useState<string | null>(null);
+  const [editCatName, setEditCatName] = useState('');
+  const [editCatIcon, setEditCatIcon] = useState('');
+
+  // Birthday countdown
+  const birthdayCountdown = useMemo(() => {
+    return getDaysUntilNextBirthday(profile.dob);
+  }, [profile.dob]);
+
+  // Separate custom categories
+  const incomeCategories = useMemo(
+    () => customCategories.filter((c) => c.type === 'income'),
+    [customCategories]
+  );
+  const expenseCategories = useMemo(
+    () => customCategories.filter((c) => c.type === 'expense'),
+    [customCategories]
+  );
 
   const handleSave = useCallback(() => {
     setProfile(localProfile);
@@ -39,15 +95,7 @@ export default function SettingsPage({
 
   const handleReset = useCallback(() => {
     onResetAll();
-    setLocalProfile({
-      name: '',
-      gender: 'male',
-      dob: '',
-      avatar: 0,
-      fontSize: 'medium',
-      fontFamily: 'Poppins',
-      accentColor: 'blue',
-    });
+    setLocalProfile({ ...DEFAULT_PROFILE });
     setShowResetConfirm(false);
   }, [onResetAll]);
 
@@ -68,7 +116,32 @@ export default function SettingsPage({
   const handleDeleteCustomCategory = useCallback((id: string) => {
     const updated = deleteCustomCategory(id);
     onCustomCategoriesChange(updated);
-  }, [onCustomCategoriesChange]);
+    if (editingCatId === id) setEditingCatId(null);
+  }, [onCustomCategoriesChange, editingCatId]);
+
+  const handleStartEditCategory = useCallback((cat: CustomCategory) => {
+    setEditingCatId(cat.id);
+    setEditCatName(cat.name);
+    setEditCatIcon(cat.icon);
+  }, []);
+
+  const handleSaveEditCategory = useCallback((id: string) => {
+    if (!editCatName.trim()) return;
+    onUpdateCustomCategory(id, { name: editCatName.trim(), icon: editCatIcon || '🎯' });
+    setEditingCatId(null);
+    setEditCatName('');
+    setEditCatIcon('');
+  }, [editCatName, editCatIcon, onUpdateCustomCategory]);
+
+  const handleCancelEditCategory = useCallback(() => {
+    setEditingCatId(null);
+    setEditCatName('');
+    setEditCatIcon('');
+  }, []);
+
+  const handleDobChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalProfile({ ...localProfile, dob: e.target.value });
+  }, [localProfile]);
 
   const accent = accentColors[localProfile.accentColor] || accentColors.blue;
 
@@ -140,17 +213,56 @@ export default function SettingsPage({
           </div>
         </div>
 
-        {/* Date of Birth */}
-        <div className="mb-5">
+        {/* Date of Birth - Calendar Picker */}
+        <div className="mb-4">
           <label className="text-[#A1A1AA] text-xs mb-2 block">Date of Birth</label>
-          <input
-            type="text"
-            value={localProfile.dob}
-            onChange={(e) => setLocalProfile({ ...localProfile, dob: e.target.value })}
-            placeholder="DD/MM/YYYY"
-            className="w-full bg-[#0F111A] rounded-xl px-4 py-3 border border-white/[0.06] focus:border-[#4DA3FF]/40 text-white text-sm outline-none placeholder:text-white/30 transition-colors"
-          />
+          <div className="relative">
+            <input
+              type="date"
+              value={localProfile.dob}
+              onChange={handleDobChange}
+              max={new Date().toISOString().split('T')[0]}
+              className="w-full bg-[#0F111A] rounded-xl px-4 py-3 border border-white/[0.06] focus:border-[#4DA3FF]/40 text-white text-sm outline-none transition-colors [color-scheme:dark]"
+            />
+            {!localProfile.dob && (
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                <Calendar size={16} className="text-white/30" />
+              </div>
+            )}
+          </div>
         </div>
+
+        {/* Birthday Countdown */}
+        {profile.dob && birthdayCountdown !== null && (
+          <div className="mb-5 rounded-xl p-3.5 border" style={{
+            background: birthdayCountdown === 0
+              ? 'linear-gradient(135deg, rgba(77,163,255,0.2), rgba(139,92,246,0.1))'
+              : 'linear-gradient(135deg, rgba(249,115,22,0.15), rgba(236,72,153,0.08))',
+            borderColor: birthdayCountdown === 0
+              ? 'rgba(77,163,255,0.3)'
+              : 'rgba(249,115,22,0.2)',
+          }}>
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{
+                backgroundColor: birthdayCountdown === 0 ? 'rgba(77,163,255,0.2)' : 'rgba(249,115,22,0.2)',
+              }}>
+                <Cake size={18} className={birthdayCountdown === 0 ? 'text-[#4DA3FF]' : 'text-[#F97316]'} />
+              </div>
+              <div>
+                <p className="text-white text-sm font-medium">
+                  {birthdayCountdown === 0
+                    ? 'Happy Birthday! 🎂'
+                    : 'Coming Soon Birthday'}
+                </p>
+                <p className="text-[#A1A1AA] text-xs mt-0.5">
+                  {birthdayCountdown === 0
+                    ? 'Wish you a great year ahead!'
+                    : `${birthdayCountdown} days remaining`}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Save Profile */}
         <button
@@ -290,9 +402,12 @@ export default function SettingsPage({
         </div>
       </div>
 
-      {/* Custom Categories Management */}
+      {/* 4. Custom Categories Management */}
       <div className="bg-[#1A1F2E] rounded-2xl p-5 mb-4 border border-white/[0.04]">
-        <h3 className="text-white font-medium text-sm mb-3">Custom Categories</h3>
+        <div className="flex items-center gap-2 mb-4">
+          <Type size={16} className="text-[#A1A1AA]" />
+          <h3 className="text-white font-medium text-sm">Custom Categories</h3>
+        </div>
 
         {/* Add custom category */}
         <div className="flex gap-2 mb-3">
@@ -317,7 +432,7 @@ export default function SettingsPage({
             Expense
           </button>
         </div>
-        <div className="flex gap-2 mb-4">
+        <div className="flex gap-2 mb-5">
           <input
             type="text"
             placeholder="Category name"
@@ -334,32 +449,147 @@ export default function SettingsPage({
           />
           <button
             onClick={handleAddCustomCategory}
-            className="px-3 py-2 bg-[#4DA3FF] text-white text-sm font-medium rounded-lg hover:bg-[#4DA3FF]/80 transition-colors"
+            className="px-4 py-2 bg-[#4DA3FF] text-white text-sm font-medium rounded-lg hover:bg-[#4DA3FF]/80 transition-colors active:scale-95"
           >
             Add
           </button>
         </div>
 
-        {/* List custom categories */}
-        {customCategories.length > 0 && (
-          <div className="space-y-2">
-            {customCategories.map((cat) => (
-              <div key={cat.id} className="flex items-center justify-between bg-[#0F111A] rounded-lg px-3 py-2.5">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">{cat.icon}</span>
-                  <span className="text-white text-sm">{cat.name}</span>
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded ${cat.type === 'income' ? 'bg-[#22C55E]/15 text-[#22C55E]' : 'bg-[#EF4444]/15 text-[#EF4444]'}`}>
-                    {cat.type}
-                  </span>
+        {/* Income Custom Categories */}
+        {incomeCategories.length > 0 && (
+          <div className="mb-4">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-2 h-2 rounded-full bg-[#22C55E]" />
+              <p className="text-[#22C55E] text-xs font-semibold uppercase tracking-wider">Income Categories</p>
+            </div>
+            <div className="space-y-2">
+              {incomeCategories.map((cat) => (
+                <div key={cat.id} className="bg-[#0F111A] rounded-xl px-3 py-2.5">
+                  {editingCatId === cat.id ? (
+                    /* Edit Mode */
+                    <div className="flex items-center gap-2">
+                      <span className="text-base">{editCatIcon || '🎯'}</span>
+                      <input
+                        type="text"
+                        value={editCatName}
+                        onChange={(e) => setEditCatName(e.target.value)}
+                        className="flex-1 bg-transparent text-white text-sm outline-none border-b border-white/20 focus:border-[#22C55E]/50 pb-0.5"
+                        autoFocus
+                      />
+                      <input
+                        type="text"
+                        value={editCatIcon}
+                        onChange={(e) => setEditCatIcon(e.target.value)}
+                        className="w-8 text-center bg-transparent text-base outline-none border-b border-white/20 focus:border-[#22C55E]/50 pb-0.5"
+                      />
+                      <button
+                        onClick={() => handleSaveEditCategory(cat.id)}
+                        className="w-7 h-7 rounded-lg bg-[#22C55E]/15 flex items-center justify-center hover:bg-[#22C55E]/25 transition-colors"
+                      >
+                        <Check size={14} className="text-[#22C55E]" />
+                      </button>
+                      <button
+                        onClick={handleCancelEditCategory}
+                        className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+                      >
+                        <X size={14} className="text-[#A1A1AA]" />
+                      </button>
+                    </div>
+                  ) : (
+                    /* Display Mode */
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">{cat.icon}</span>
+                        <span className="text-white text-sm">{cat.name}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => handleStartEditCategory(cat)}
+                          className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+                        >
+                          <Pencil size={13} className="text-[#A1A1AA]" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteCustomCategory(cat.id)}
+                          className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center hover:bg-[#EF4444]/20 transition-colors"
+                        >
+                          <Trash2 size={13} className="text-[#A1A1AA] hover:text-[#EF4444]" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <button
-                  onClick={() => handleDeleteCustomCategory(cat.id)}
-                  className="text-[#A1A1AA] hover:text-[#EF4444] transition-colors"
-                >
-                  <Trash2 size={14} />
-                </button>
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Expense Custom Categories */}
+        {expenseCategories.length > 0 && (
+          <div className="mb-3">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-2 h-2 rounded-full bg-[#EF4444]" />
+              <p className="text-[#EF4444] text-xs font-semibold uppercase tracking-wider">Expense Categories</p>
+            </div>
+            <div className="space-y-2">
+              {expenseCategories.map((cat) => (
+                <div key={cat.id} className="bg-[#0F111A] rounded-xl px-3 py-2.5">
+                  {editingCatId === cat.id ? (
+                    /* Edit Mode */
+                    <div className="flex items-center gap-2">
+                      <span className="text-base">{editCatIcon || '🎯'}</span>
+                      <input
+                        type="text"
+                        value={editCatName}
+                        onChange={(e) => setEditCatName(e.target.value)}
+                        className="flex-1 bg-transparent text-white text-sm outline-none border-b border-white/20 focus:border-[#EF4444]/50 pb-0.5"
+                        autoFocus
+                      />
+                      <input
+                        type="text"
+                        value={editCatIcon}
+                        onChange={(e) => setEditCatIcon(e.target.value)}
+                        className="w-8 text-center bg-transparent text-base outline-none border-b border-white/20 focus:border-[#EF4444]/50 pb-0.5"
+                      />
+                      <button
+                        onClick={() => handleSaveEditCategory(cat.id)}
+                        className="w-7 h-7 rounded-lg bg-[#EF4444]/15 flex items-center justify-center hover:bg-[#EF4444]/25 transition-colors"
+                      >
+                        <Check size={14} className="text-[#EF4444]" />
+                      </button>
+                      <button
+                        onClick={handleCancelEditCategory}
+                        className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+                      >
+                        <X size={14} className="text-[#A1A1AA]" />
+                      </button>
+                    </div>
+                  ) : (
+                    /* Display Mode */
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">{cat.icon}</span>
+                        <span className="text-white text-sm">{cat.name}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => handleStartEditCategory(cat)}
+                          className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"
+                        >
+                          <Pencil size={13} className="text-[#A1A1AA]" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteCustomCategory(cat.id)}
+                          className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center hover:bg-[#EF4444]/20 transition-colors"
+                        >
+                          <Trash2 size={13} className="text-[#A1A1AA] hover:text-[#EF4444]" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -368,7 +598,7 @@ export default function SettingsPage({
         )}
       </div>
 
-      {/* 4. Reset All Data */}
+      {/* 5. Reset All Data */}
       <button
         onClick={() => setShowResetConfirm(true)}
         className="w-full bg-[#1A1F2E] rounded-2xl p-4 border border-[#EF4444]/10 mb-4 flex items-center gap-3 hover:bg-[#EF4444]/5 transition-colors"
@@ -382,7 +612,7 @@ export default function SettingsPage({
         </div>
       </button>
 
-      {/* 5. App Information */}
+      {/* 6. App Information */}
       <button
         onClick={() => setShowAppInfo(true)}
         className="w-full bg-[#1A1F2E] rounded-2xl p-4 border border-white/[0.04] flex items-center gap-3 hover:bg-white/[0.02] transition-colors"
@@ -400,7 +630,7 @@ export default function SettingsPage({
       <ConfirmDialog
         isOpen={showResetConfirm}
         title="Reset All Data"
-        message="Are you sure? All data will be deleted permanently."
+        message="Kya aap sure hain? Saara data permanently delete ho jayega jaise transactions, profile settings, aur custom categories."
         confirmText="Delete All"
         cancelText="Cancel"
         onConfirm={handleReset}

@@ -113,6 +113,16 @@ export function deleteCustomCategory(id: string): CustomCategory[] {
   return categories;
 }
 
+export function updateCustomCategory(id: string, updates: Partial<CustomCategory>): CustomCategory[] {
+  const categories = getCustomCategories().map((c) =>
+    c.id === id ? { ...c, ...updates } : c
+  );
+  if (isLocalStorageAvailable()) {
+    localStorage.setItem(CUSTOM_CATEGORIES_KEY, JSON.stringify(categories));
+  }
+  return categories;
+}
+
 export function resetAllData(): void {
   if (!isLocalStorageAvailable()) return;
   localStorage.removeItem(TRANSACTIONS_KEY);

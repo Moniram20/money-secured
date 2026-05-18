@@ -18,3 +18,24 @@ Stage Summary:
 - All 5 screens replicated with exact dark theme design
 - Offline functionality via localStorage
 - App running successfully at port 3000
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Fix 3 Settings issues - Reset All Data, Date of Birth, Custom Categories
+
+Work Log:
+- Read all relevant files: SettingsPage.tsx, ConfirmDialog.tsx, types.ts, storage.ts, page.tsx
+- Fixed Reset All Data: Now uses resetAllData() from storage.ts, navigates to home after reset
+- Fixed Date of Birth: Changed text input to native date picker (type="date"), added dark color scheme
+- Added Birthday Countdown: Shows "Coming Soon Birthday" with days remaining, or "Happy Birthday" on the day
+- Added updateCustomCategory() to storage.ts for editing existing custom categories
+- Rewrote Custom Categories section: Separated Income and Expense categories with colored headers
+- Added inline edit functionality: Edit icon opens name/icon editing with save/cancel buttons
+- Built successfully, zero lint errors
+
+Stage Summary:
+- Reset All Data: Confirmation popup works, properly clears all localStorage and resets state, navigates to home
+- DOB: Calendar date picker opens on click, saves with profile, shows birthday countdown below
+- Custom Categories: Income/Expense shown separately with edit (pencil icon) and delete functionality
+- Files modified: storage.ts, page.tsx, SettingsPage.tsx
