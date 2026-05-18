@@ -1,0 +1,23 @@
+{
+  "code": 200,
+  "data": {
+    "description": "",
+    "external": {},
+    "html": "<html><head><meta name=\"color-scheme\" content=\"light dark\"><meta charset=\"utf-8\"></head><body><pre>{\"error\":\"sandbox is inactive\"}</pre><div class=\"json-formatter-container\"></div></body></html>",
+    "metadata": {
+      "color-scheme": "light dark"
+    },
+    "title": "",
+    "url": "https://preview-chat-32e324f6-e3c7-4bdb-8755-d8598f1ffae8.space-z.ai/",
+    "usage": {
+      "tokens": 52
+    },
+    "warning": "Target URL returned error 429: Too Many Requests"
+  },
+  "meta": {
+    "usage": {
+      "tokens": 52
+    }
+  },
+  "status": 20000
+}
