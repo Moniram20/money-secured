@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { Save, Type, Info, Trash2, Palette, User, Calendar, Cake, Pencil, Check, X, Share2 } from 'lucide-react';
+import { Save, Type, Info, Trash2, Palette, User, Calendar, Cake, Pencil, Check, X, Share2, Download } from 'lucide-react';
 import { Profile, CustomCategory, ALL_AVATARS, AVATARS_MALE, AVATARS_FEMALE, accentColors, DEFAULT_PROFILE } from '@/lib/types';
 import { setProfile, deleteCustomCategory, updateCustomCategory } from '@/lib/storage';
 import ConfirmDialog from './ConfirmDialog';
 import AppInfoDialog from './AppInfoDialog';
+import InstallGuideDialog from './InstallGuideDialog';
 
 interface SettingsPageProps {
   profile: Profile;
@@ -64,6 +65,7 @@ export default function SettingsPage({
   const [saved, setSaved] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showAppInfo, setShowAppInfo] = useState(false);
+  const [showInstallGuide, setShowInstallGuide] = useState(false);
   const [editingCatId, setEditingCatId] = useState<string | null>(null);
   const [editCatName, setEditCatName] = useState('');
   const [editCatIcon, setEditCatIcon] = useState('');
@@ -559,7 +561,7 @@ export default function SettingsPage({
             try {
               await navigator.share({
                 title: 'Money Secured - Track Your Money',
-                text: 'Money Secured app use karo! Apni income aur expense easily track karo. Offline app hai, koi login nahi chahiye!',
+                text: 'Money Secured app use karo! Apni income aur expense easily track karo. Offline app hai, koi login nahi chahiye!\n\n📱 Install kaise kare:\nAndroid: Chrome > 3 dots > Add to Home Screen\niPhone: Safari > Share > Add to Home Screen\n\n🔗 App Link:',
                 url: 'https://money-secured.vercel.app/',
               });
             } catch (err) {
@@ -586,7 +588,21 @@ export default function SettingsPage({
         </div>
       </button>
 
-      {/* 4. App Information */}
+      {/* 4. Install Guide */}
+      <button
+        onClick={() => setShowInstallGuide(true)}
+        className="w-full bg-[#1A1F2E] rounded-2xl p-4 border border-white/[0.04] mb-4 flex items-center gap-3 hover:bg-white/[0.02] transition-colors"
+      >
+        <div className="w-10 h-10 rounded-xl bg-[#22C55E]/15 flex items-center justify-center">
+          <Download size={18} className="text-[#22C55E]" />
+        </div>
+        <div className="text-left">
+          <p className="text-white font-medium text-sm">Install Guide</p>
+          <p className="text-[#A1A1AA] text-xs">How to install on Android & iPhone</p>
+        </div>
+      </button>
+
+      {/* 5. App Information */}
       <button
         onClick={() => setShowAppInfo(true)}
         className="w-full bg-[#1A1F2E] rounded-2xl p-4 border border-white/[0.04] flex items-center gap-3 hover:bg-white/[0.02] transition-colors"
@@ -614,6 +630,9 @@ export default function SettingsPage({
 
       {/* App Info Dialog */}
       <AppInfoDialog isOpen={showAppInfo} onClose={() => setShowAppInfo(false)} />
+
+      {/* Install Guide Dialog */}
+      <InstallGuideDialog isOpen={showInstallGuide} onClose={() => setShowInstallGuide(false)} />
     </div>
   );
 }
