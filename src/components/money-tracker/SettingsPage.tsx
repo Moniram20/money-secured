@@ -560,7 +560,7 @@ export default function SettingsPage({
               await navigator.share({
                 title: 'Money Secured - Track Your Money',
                 text: 'Money Secured app use karo! Apni income aur expense easily track karo. Offline app hai, koi login nahi chahiye!',
-                url: window.location.href,
+                url: 'https://money-secured.vercel.app/',
               });
             } catch (err) {
               // User cancelled or share failed
@@ -568,8 +568,8 @@ export default function SettingsPage({
           } else {
             // Fallback: copy link to clipboard
             try {
-              await navigator.clipboard.writeText(window.location.href);
-              alert('App link copied! Share karo apne dosto ke saath.');
+              await navigator.clipboard.writeText('https://money-secured.vercel.app/');
+              alert('App link copied! Share karo apne dosto ke saath.\n\nhttps://money-secured.vercel.app/');
             } catch {
               alert('Sharing not supported in this browser.');
             }
