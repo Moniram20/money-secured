@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { Save, Type, Info, Trash2, Palette, User, Calendar, Cake, Pencil, Check, X } from 'lucide-react';
+import { Save, Type, Info, Trash2, Palette, User, Calendar, Cake, Pencil, Check, X, Share2 } from 'lucide-react';
 import { Profile, CustomCategory, ALL_AVATARS, AVATARS_MALE, AVATARS_FEMALE, accentColors, DEFAULT_PROFILE } from '@/lib/types';
 import { setProfile, addCustomCategory, deleteCustomCategory, updateCustomCategory } from '@/lib/storage';
 import ConfirmDialog from './ConfirmDialog';
@@ -264,15 +264,6 @@ export default function SettingsPage({
           </div>
         )}
 
-        {/* Save Profile */}
-        <button
-          onClick={handleSave}
-          className="w-full py-3 rounded-xl text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
-          style={{ background: `linear-gradient(135deg, ${accent.main}, ${accent.main}cc)`, boxShadow: `0 4px 20px ${accent.glow}` }}
-        >
-          <Save size={16} />
-          {saved ? 'Saved!' : 'Save Profile'}
-        </button>
       </div>
 
       {/* 2. Profile Picture Selection */}
@@ -598,7 +589,17 @@ export default function SettingsPage({
         )}
       </div>
 
-      {/* 5. Reset All Data */}
+      {/* 1. Save Changes */}
+      <button
+        onClick={handleSave}
+        className="w-full py-3.5 rounded-2xl text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+        style={{ background: `linear-gradient(135deg, ${accent.main}, ${accent.main}cc)`, boxShadow: `0 4px 20px ${accent.glow}` }}
+      >
+        <Save size={16} />
+        {saved ? 'Saved!' : 'Save Changes'}
+      </button>
+
+      {/* 2. Reset All Data */}
       <button
         onClick={() => setShowResetConfirm(true)}
         className="w-full bg-[#1A1F2E] rounded-2xl p-4 border border-[#EF4444]/10 mb-4 flex items-center gap-3 hover:bg-[#EF4444]/5 transition-colors"
@@ -612,7 +613,41 @@ export default function SettingsPage({
         </div>
       </button>
 
-      {/* 6. App Information */}
+      {/* 3. Share App */}
+      <button
+        onClick={async () => {
+          if (typeof navigator !== 'undefined' && navigator.share) {
+            try {
+              await navigator.share({
+                title: 'Money Secured - Track Your Money',
+                text: 'Money Secured app use karo! Apni income aur expense easily track karo. Offline app hai, koi login nahi chahiye!',
+                url: window.location.href,
+              });
+            } catch (err) {
+              // User cancelled or share failed
+            }
+          } else {
+            // Fallback: copy link to clipboard
+            try {
+              await navigator.clipboard.writeText(window.location.href);
+              alert('App link copied! Share karo apne dosto ke saath.');
+            } catch {
+              alert('Sharing not supported in this browser.');
+            }
+          }
+        }}
+        className="w-full bg-[#1A1F2E] rounded-2xl p-4 border border-white/[0.04] mb-4 flex items-center gap-3 hover:bg-white/[0.02] transition-colors"
+      >
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${accent.main}15` }}>
+          <Share2 size={18} style={{ color: accent.main }} />
+        </div>
+        <div className="text-left">
+          <p className="text-white font-medium text-sm">Share App</p>
+          <p className="text-[#A1A1AA] text-xs">Share with friends & family</p>
+        </div>
+      </button>
+
+      {/* 4. App Information */}
       <button
         onClick={() => setShowAppInfo(true)}
         className="w-full bg-[#1A1F2E] rounded-2xl p-4 border border-white/[0.04] flex items-center gap-3 hover:bg-white/[0.02] transition-colors"
