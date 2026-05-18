@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "The screenshot displays a **mobile app interface for a \"Spending Report\"** with a dark theme (black/dark gray background) and vibrant accent colors (pink, green, red). Here’s a detailed breakdown:  \n\n\n### **Top Status Bar**  \n- **Time**: 10:38 am (left)  \n- **Icons**: Moon (do not disturb), YouTube (app), network stats (11.8 K/s, Vo LTE, R4G+, signal bars), battery (62%) (right).  \n\n\n### **Header Section**  \n- **Title**: *\"Spending Report\"* (bold white text).  \n- **Subtitle**: *\"Analyze your financial data\"* (smaller gray text, below the title).  \n\n\n### **Time Period Selection**  \n- **Tabs**: Three rounded rectangular buttons for report frequency:  \n  - *\"Monthly\"* (pink background, white text, **selected**).  \n  - *\"Yearly\"* (dark gray background, white text).  \n  - *\"Custom\"* (dark gray background, white text).  \n\n\n### **Date Navigation**  \n- **Calendar Icon**: Pink calendar icon (left of the date).  \n- **Date**: *\"May 2026\"* (white text, center).  \n- **Navigation Arrows**: Left/right arrows (dark gray, for switching months).  \n\n\n### **Financial Summary Cards**  \nThree rounded rectangular cards (dark gray background) with colored text/icons:  \n1. **Income**:  \n   - Icon: Green upward arrow.  \n   - Label: *\"Income\"* (white text).  \n   - Amount: *\"₹15,000\"* (bright green text).  \n2. **Expense**:  \n   - Icon: Red downward arrow.  \n   - Label: *\"Expense\"* (white text).  \n   - Amount: *\"₹140\"* (red text).  \n3. **Balance**:  \n   - Icon: Pink upward arrow.  \n   - Label: *\"Balance\"* (white text).  \n   - Amount: *\"₹14,860\"* (pink text).  \n\n\n### **Analytics Section**  \nTitle: *\"Analytics\"* (bold white text). Contains four cards:  \n\n1. **Highest Expense**:  \n   - Icon: Red downward arrow + line graph.  \n   - Label: *\"Highest Expense\"* (gray text).  \n   - Category: *\"Others Expense\"* (white text).  \n   - Amount: *\"₹140\"* (red text).  \n\n2. **Lowest Expense**:  \n   - Icon: Green upward arrow + line graph.  \n   - Label: *\"Lowest Expense\"* (gray text).  \n   - Category: *\"Others Expense\"* (white text).  \n   - Amount: *\"₹140\"* (green text).  \n\n3. **Total Savings**:  \n   - Icon: Bank building + piggy bank.  \n   - Label: *\"Total Savings\"* (gray text).  \n   - Amount: *\"₹14,860\"* (green text).  \n\n4. **Transactions**:  \n   - Icon: Grid of numbers (1-4).  \n   - Label: *\"Transactions\"* (gray text).  \n   - Count: *\"2\"* (purple text).  \n\n\n### **Bottom Navigation Bar**  \n- **Icons/Labels** (dark gray background, white text/icons):  \n  - *\"Home\"* (house icon, left).  \n  - *\"Stats\"* (bar graph icon).  \n  - **Floating Action Button (FAB)**: Large pink circle with a white \"+\" (center, for adding transactions).  \n  - *\"Report\"* (document icon, pink text, **selected**).  \n  - *\"Setting\"* (gear icon, right).  \n\n\n### **Partial Bottom Section**  \n- A card titled *\"Category Distrib...\"* (truncated, likely \"Category Distribution\") with a bar graph (partially visible) and text: *\"Others Expense\"* (gray) and *\"₹140 100%\"* (pink).  \n\n\n### **Overall Design**  \n- **Color Scheme**: Dark background with high-contrast text (white, pink, green, red) for readability.  \n- **Layout**: Clean, card-based design for easy scanning of financial data.  \n- **Functionality**: Focus on financial tracking (income, expenses, balance, analytics) with navigation for home, stats, reports, and settings.  \n\n\nThis interface is typical of a personal finance app, prioritizing clarity and quick access to key financial metrics.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1779073339,
+  "id": "202605181101461428aef4469d48b7",
+  "model": "glm-4.6v",
+  "object": "chat.completion",
+  "request_id": "202605181101461428aef4469d48b7",
+  "usage": {
+    "completion_tokens": 916,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 1542,
+    "prompt_tokens_details": {
+      "cached_tokens": 4
+    },
+    "total_tokens": 2458
+  }
+}

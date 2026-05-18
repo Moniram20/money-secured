@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "The screenshot displays a **mobile app interface** (likely a finance/spending tracker) with a **dark theme** (black/dark gray background) and a blue status bar at the top. Here’s a detailed breakdown:  \n\n\n### **Status Bar (Top)**  \n- **Time**: `10:38 am` (left).  \n- **Icons**: WhatsApp, YouTube (left); network stats (`6.59 Vo`, `R4G+`, `LTE`, battery `62%`) (right).  \n\n\n### **Main Content: “Stats Overview”**  \n- **Header**:  \n  - Title: `Stats Overview` (bold white text).  \n  - Subtitle: `Your spending analytics` (light gray text).  \n\n- **Section 1: “Spending by Category”**  \n  - A circular (donut) chart with:  \n    - Center text: `Total` (gray) + `₹140` (white, total spending).  \n    - Legend: `Others Expense` (gray text with a gray dot, indicating the only category).  \n\n- **Section 2: “Spending Breakdown”**  \n  - A card showing:  \n    - Icon: Bar graph (colorful).  \n    - Text: `Others Expense` (white).  \n    - Amount: `₹140` (white, right-aligned).  \n    - Percentage: `100%` (white, right of amount).  \n    - A gray progress bar (full, indicating 100% of spending).  \n\n\n### **Bottom Navigation Bar**  \n- **Icons/Buttons** (dark gray background):  \n  - `Home`: House icon (white).  \n  - `Stats`: Bar graph icon (pink, highlighted, indicating current tab).  \n  - **Floating Action Button (FAB)**: Large pink circle with a white `+` (for adding new entries).  \n  - `Report`: Document icon (white).  \n  - `Setting`: Gear icon (white).  \n\n\n### **Additional Cards (Below Breakdown)**  \n- Two cards (partially visible):  \n  - Left: `Top Spending` (with a line graph icon, purple background).  \n  - Right: `Categories` (with a star icon, green background, showing `1` category).  \n\n\n### **Colors & Style**  \n- Dominant colors: Dark gray (background), white (text/icons), pink (FAB, “Stats” tab), gray (charts/progress bars).  \n- Layout: Clean, card-based design with clear sectioning for analytics.  \n\n\nThis interface focuses on **spending analytics**, showing total spending, category breakdown, and navigation for home, stats, reports, and settings. The FAB suggests functionality to add new expenses.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1779073377,
+  "id": "2026051811024647b54a74321f4ba7",
+  "model": "glm-4.6v",
+  "object": "chat.completion",
+  "request_id": "2026051811024647b54a74321f4ba7",
+  "usage": {
+    "completion_tokens": 570,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 1542,
+    "prompt_tokens_details": {
+      "cached_tokens": 4
+    },
+    "total_tokens": 2112
+  }
+}

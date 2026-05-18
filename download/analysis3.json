@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "The screenshot displays a **mobile app interface for adding a transaction**, likely from a finance or expense-tracking app, with a dark-themed design. Here’s a detailed breakdown:  \n\n\n### **Overall Layout & Background**  \n- The screen has a **dark (near-black) background** with rounded corners for the main content area, creating a modern, sleek look.  \n- The top status bar (blue) shows: time (`10:38 am`), icons (moon for Do Not Disturb, YouTube), network stats (`19.1 K/s`, `Vo LTE`, `R4G+`), and battery (`62%`).  \n\n\n### **Header Section**  \n- **Title**: “Add Transaction” (white, bold, centered at the top of the content area).  \n- **Close Button**: A circular “X” icon (white) in the top-right corner, for dismissing the “Add Transaction” modal.  \n\n\n### **Transaction Type Toggle**  \n- Two buttons for selecting transaction type:  \n  - **“Income”**: Left button, gray background, white text, with an upward arrow icon (gray).  \n  - **“Expense”**: Right button, bright red background, white text, with a downward arrow icon (white).  \n  - *Note*: “Expense” is highlighted (selected), indicating the current mode.  \n\n\n### **Amount Input**  \n- **Label**: “Amount” (white, top-aligned).  \n- **Input Field**: A rounded rectangle with a dark background, containing:  \n  - A pink Rupee symbol (`₹`) icon (left).  \n  - Placeholder text: “Enter Amount” (gray).  \n\n\n### **Category Selection**  \n- **Label**: “Category” (white, top-aligned).  \n- **Grid of Category Buttons**: 12 rounded square buttons (3 rows × 4 columns), each with an icon, label, and dark background. Categories include:  \n  1. *Food & Dining*: Burger icon.  \n  2. *Groceries*: Shopping cart icon.  \n  3. *Housing Rent*: House icon.  \n  4. *Bills & Utilities*: Lightbulb icon.  \n  5. *Transportation*: Taxi icon.  \n  6. *Shopping*: Shopping bags icon.  \n  7. *Entertainment*: Game controller icon.  \n  8. *Mobile Recharge*: Mobile phone icon.  \n  9. *Movies & Fun*: Clapperboard icon.  \n  10. *Coffee & Drinks*: Coffee cup icon.  \n  11. *Others Expense*: Bar chart icon.  \n  12. *Custom*: Target icon (for user-defined categories).  \n\n\n### **Notes Section**  \n- **Label**: “Notes (Optional)” (white, top-aligned).  \n- **Input Field**: A rounded rectangle with a dark background, containing placeholder text: “Add Notes...” (gray).  \n\n\n### **Bottom Navigation**  \n- Standard Android navigation bar:  \n  - Left: Hamburger menu icon (three horizontal lines).  \n  - Center: Home button (circle).  \n  - Right: Back button (triangle).  \n\n\n### **Colors & Styling**  \n- Dominant colors: Dark background (near-black), white text/labels, red (for “Expense” button), gray (for inactive elements/placeholders), and colorful icons for categories.  \n- Rounded corners on all interactive elements (buttons, input fields) for a soft, modern aesthetic.  \n\n\nThis interface is designed for quick, intuitive entry of expenses (or income), with clear categorization and optional notes to help users track their finances.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1779073371,
+  "id": "20260518110232f797cb88003244e0",
+  "model": "glm-4.6v",
+  "object": "chat.completion",
+  "request_id": "20260518110232f797cb88003244e0",
+  "usage": {
+    "completion_tokens": 753,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 1542,
+    "prompt_tokens_details": {
+      "cached_tokens": 5
+    },
+    "total_tokens": 2295
+  }
+}

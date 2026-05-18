@@ -1,0 +1,160 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-mt-bg: #0a0a12;
+  --color-mt-card: #1a1a2e;
+  --color-mt-card-light: #252542;
+  --color-mt-pink: #e91e8c;
+  --color-mt-green: #4caf50;
+  --color-mt-red: #f44336;
+  --color-mt-text: #ffffff;
+  --color-mt-text-secondary: #9ca3af;
+  --color-mt-gradient-start: #2d1b4e;
+  --color-mt-gradient-end: #4a1a5e;
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: #0a0a12;
+  --foreground: #ffffff;
+  --card: #1a1a2e;
+  --card-foreground: #ffffff;
+  --popover: #1a1a2e;
+  --popover-foreground: #ffffff;
+  --primary: #e91e8c;
+  --primary-foreground: #ffffff;
+  --secondary: #252542;
+  --secondary-foreground: #ffffff;
+  --muted: #252542;
+  --muted-foreground: #9ca3af;
+  --accent: #252542;
+  --accent-foreground: #ffffff;
+  --destructive: #f44336;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: #e91e8c;
+  --chart-1: #e91e8c;
+  --chart-2: #4caf50;
+  --chart-3: #f44336;
+  --chart-4: #45b7d1;
+  --chart-5: #f9ca24;
+  --sidebar: #1a1a2e;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #e91e8c;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #252542;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: #e91e8c;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-[#0a0a12] text-white;
+  }
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Font size classes */
+.font-size-small {
+  font-size: 14px;
+}
+.font-size-medium {
+  font-size: 16px;
+}
+.font-size-large {
+  font-size: 18px;
+}
+
+/* Donut chart animation */
+@keyframes donut-fill {
+  from {
+    stroke-dashoffset: var(--donut-circumference);
+  }
+  to {
+    stroke-dashoffset: var(--donut-offset);
+  }
+}
+
+.donut-segment {
+  animation: donut-fill 1s ease-out forwards;
+}
+
+/* Progress bar animation */
+@keyframes progress-fill {
+  from {
+    width: 0%;
+  }
+}
+
+.progress-animated {
+  animation: progress-fill 0.8s ease-out;
+}
+
+/* Number input - hide spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}

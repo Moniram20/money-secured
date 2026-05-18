@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "The screenshot displays a **personal finance tracking mobile app** with a dark-themed, modern UI. Here’s a detailed breakdown:  \n\n\n### **Status Bar (Top)**  \n- **Time**: 10:38 am (left)  \n- **Icons**: Moon (night mode), YouTube (notification), Wi-Fi, battery (62%), network (Vo LTE, R4G+), and data speed (7.04 K/s) (right).  \n\n\n### **Header Section**  \n- **Greeting**: “Good Morning,” in white text, followed by the user’s name, *“Moniram Tamang”* in pink text.  \n- **Profile Icon**: A circular avatar with a yellow emoji-style face (right of the greeting).  \n\n\n### **Total Balance Card**  \n- **Background**: Gradient dark purple/pink.  \n- **Icon**: Pink wallet icon (left).  \n- **Text**: “Total Balance” (gray).  \n- **Balance**: “₹14,860” (large white text).  \n- **Trend Indicators**:  \n  - Green badge: “+₹15,000” (upward arrow, income).  \n  - Red badge: “-₹140” (downward arrow, expense).  \n\n\n### **Income & Expenses Cards (Side-by-Side)**  \n- **Income Card (Left)**:  \n  - Background: Dark green.  \n  - Icon: Green upward arrow (growth).  \n  - Text: “Income” (white).  \n  - Amount: “₹15,000” (bright green text).  \n\n- **Expenses Card (Right)**:  \n  - Background: Dark red.  \n  - Icon: Red downward arrow (decline).  \n  - Text: “Expenses” (white).  \n  - Amount: “₹140” (bright red text).  \n\n\n### **Recent Transactions Section**  \n- **Title**: “Recent Transactions” (white text, left).  \n- **“View All” Link**: Pink text with a right arrow (right, for full transaction history).  \n\n- **Transaction 1 (Expense)**:  \n  - Icon: Bar chart (purple background).  \n  - Title: “Others Expense” (white).  \n  - Subtitle: “Yesterday • Khaya fha” (gray).  \n  - Amount: “-₹140” (red text).  \n  - Tag: “Expense” (red badge).  \n\n- **Transaction 2 (Income)**:  \n  - Icon: Brown briefcase (green background).  \n  - Title: “Salary” (white).  \n  - Subtitle: “3 days ago • My Sala…” (gray, truncated).  \n  - Amount: “+₹15,000” (green text).  \n  - Tag: “Income” (green badge).  \n\n\n### **Bottom Navigation Bar**  \n- **Home**: Pink home icon + “Home” (pink text, active state).  \n- **Stats**: Gray bar chart icon + “Stats” (gray text).  \n- **Add Button**: Large pink circular button with a white “+” (center, for adding transactions).  \n- **Report**: Gray document icon + “Report” (gray text).  \n- **Setting**: Gray gear icon + “Setting” (gray text).  \n\n\n### **Overall Design**  \n- **Color Scheme**: Dark background (near-black) with vibrant accents (pink, green, red) for emphasis.  \n- **Layout**: Clean, card-based structure with clear hierarchy (balance → income/expenses → transactions → navigation).  \n- **Icons/Buttons**: Minimalist, intuitive icons (wallet, arrows, home, etc.) with high contrast for readability.  \n\n\nThis app focuses on **personal finance management**, displaying key metrics (balance, income, expenses) and recent transactions, with easy access to add new entries or navigate to other sections (stats, reports, settings).",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1779073341,
+  "id": "202605181102016f2adb1460e442be",
+  "model": "glm-4.6v",
+  "object": "chat.completion",
+  "request_id": "202605181102016f2adb1460e442be",
+  "usage": {
+    "completion_tokens": 811,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 1542,
+    "prompt_tokens_details": {
+      "cached_tokens": 4
+    },
+    "total_tokens": 2353
+  }
+}
