@@ -125,9 +125,11 @@ export function updateCustomCategory(id: string, updates: Partial<CustomCategory
 
 export function resetAllData(): void {
   if (!isLocalStorageAvailable()) return;
-  localStorage.removeItem(TRANSACTIONS_KEY);
-  localStorage.removeItem(PROFILE_KEY);
-  localStorage.removeItem(CUSTOM_CATEGORIES_KEY);
+  // Set empty data instead of removing keys
+  // so getTransactions() won't re-initialize with sample data
+  localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify([]));
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(DEFAULT_PROFILE));
+  localStorage.setItem(CUSTOM_CATEGORIES_KEY, JSON.stringify([]));
 }
 
 // Helpers

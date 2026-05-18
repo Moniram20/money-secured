@@ -117,7 +117,7 @@ export default function MoneySecuredApp() {
   const handleResetAll = useCallback(() => {
     resetAllData();
     setAppState({
-      transactions: SAMPLE_TRANSACTIONS,
+      transactions: [],
       profile: DEFAULT_PROFILE,
       customCategories: [],
     });
