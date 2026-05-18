@@ -537,7 +537,7 @@ export default function SettingsPage({
       </button>
 
       {/* 2. Reset All Data */}
-      <div className="mt-6">
+      <div className="mt-6 mb-4">
       <button
         onClick={() => setShowResetConfirm(true)}
         className="w-full bg-[#1A1F2E] rounded-2xl p-4 border border-[#EF4444]/10 flex items-center gap-3 hover:bg-[#EF4444]/5 transition-colors"
