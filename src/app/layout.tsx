@@ -23,10 +23,20 @@ const nunito = Nunito({
 
 export const metadata: Metadata = {
   title: "Money Secured",
-  description: "Money Secured - A modern finance app to track your income and expenses with powerful analytics.",
+  description: "Money Secured - A modern finance app to track your income and expenses with powerful analytics. 100% offline.",
   keywords: ["Money Secured", "Finance", "Expense Tracker", "Budget", "Money Manager"],
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Money Secured",
+  },
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: "/icon-192.png",
+    apple: "/icon-512.png",
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
   },
 };
 
@@ -45,6 +55,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="apple-touch-icon" href="/icon-512.png" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js').catch(function(){});
+                });
+              }
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${poppins.variable} ${inter.variable} ${nunito.variable} antialiased bg-[#0F111A] text-white`}
       >
