@@ -85,14 +85,14 @@ export default function DonutChart({
         </div>
       </div>
       {/* Legend */}
-      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 px-2">
+      <div className="grid grid-cols-2 gap-x-4 gap-y-2 px-2 w-full">
         {segments.map((segment, index) => (
           <div key={index} className="flex items-center gap-1.5 text-xs">
             <div
               className="w-2.5 h-2.5 rounded-full shrink-0"
               style={{ backgroundColor: segment.color }}
             />
-            <span className="text-[#A1A1AA]">
+            <span className="text-[#A1A1AA] truncate">
               {segment.icon} {segment.label}
             </span>
           </div>

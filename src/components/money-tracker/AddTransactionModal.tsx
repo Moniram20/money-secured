@@ -11,6 +11,7 @@ interface AddTransactionModalProps {
   onUpdate: (transaction: Transaction) => void;
   editingTransaction: Transaction | null;
   customCategories: CustomCategory[];
+  onAddCustomCategory?: (category: CustomCategory) => void;
 }
 
 function getInitialValues(editingTransaction: Transaction | null) {
@@ -42,6 +43,7 @@ export default function AddTransactionModal({
   onUpdate,
   editingTransaction,
   customCategories,
+  onAddCustomCategory,
 }: AddTransactionModalProps) {
   const initial = getInitialValues(editingTransaction);
   const [type, setType] = useState<'income' | 'expense'>(initial.type);
@@ -64,9 +66,21 @@ export default function AddTransactionModal({
 
   const handleSelectCustomCategory = () => {
     if (customName.trim()) {
-      setCategory(customName.trim());
-      setCategoryIcon(customIcon);
+      const newCat: CustomCategory = {
+        id: Date.now().toString(),
+        type,
+        name: customName.trim(),
+        icon: customIcon || '🎯',
+      };
+      // Save custom category permanently
+      if (onAddCustomCategory) {
+        onAddCustomCategory(newCat);
+      }
+      setCategory(newCat.name);
+      setCategoryIcon(newCat.icon);
       setShowCustomInput(false);
+      setCustomName('');
+      setCustomIcon('🎯');
     }
   };
 
@@ -165,27 +179,27 @@ export default function AddTransactionModal({
                 <button
                   key={cat.name}
                   onClick={() => { setCategory(cat.name); setCategoryIcon(cat.icon); setShowCustomInput(false); }}
-                  className={`flex flex-col items-center gap-1.5 py-3 rounded-xl text-xs transition-all border ${
+                  className={`flex flex-col items-center gap-1 py-2.5 px-1 rounded-xl transition-all border ${
                     category === cat.name
                       ? 'bg-[#4DA3FF]/15 border-[#4DA3FF]/40 text-white'
                       : 'bg-[#1A1F2E] border-transparent text-[#A1A1AA] hover:bg-[#252a3a]'
                   }`}
                 >
-                  <span className="text-xl">{cat.icon}</span>
-                  <span className="truncate w-full text-center px-1">{cat.name}</span>
+                  <span className="text-lg leading-none">{cat.icon}</span>
+                  <span className="text-[10px] leading-tight text-center w-full break-words">{cat.name}</span>
                 </button>
               ))}
               {/* Custom category button */}
               <button
                 onClick={() => setShowCustomInput(!showCustomInput)}
-                className={`flex flex-col items-center gap-1.5 py-3 rounded-xl text-xs transition-all border ${
+                className={`flex flex-col items-center gap-1 py-2.5 px-1 rounded-xl transition-all border ${
                   showCustomInput
                     ? 'bg-[#4DA3FF]/15 border-[#4DA3FF]/40 text-white'
                     : 'bg-[#1A1F2E] border-transparent text-[#A1A1AA] hover:bg-[#252a3a]'
                 }`}
               >
-                <span className="text-xl">➕</span>
-                <span className="truncate w-full text-center px-1">Custom</span>
+                <span className="text-lg leading-none">➕</span>
+                <span className="text-[10px] leading-tight text-center w-full break-words">Custom</span>
               </button>
             </div>
 

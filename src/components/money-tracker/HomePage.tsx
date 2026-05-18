@@ -10,9 +10,10 @@ interface HomePageProps {
   profile: Profile;
   onEdit: (transaction: Transaction) => void;
   onDelete: (id: string) => void;
+  onNavigateSettings: () => void;
 }
 
-export default function HomePage({ transactions, profile, onEdit, onDelete }: HomePageProps) {
+export default function HomePage({ transactions, profile, onEdit, onDelete, onNavigateSettings }: HomePageProps) {
   const greeting = getGreeting();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null);
 
@@ -51,7 +52,7 @@ export default function HomePage({ transactions, profile, onEdit, onDelete }: Ho
           <p className="text-[#A1A1AA] text-sm">{greeting}</p>
           <h1 className="text-xl font-bold text-white mt-0.5">{displayName}</h1>
         </div>
-        <button className="w-11 h-11 rounded-full glass-card flex items-center justify-center text-xl card-hover">
+        <button onClick={onNavigateSettings} className="w-11 h-11 rounded-full glass-card flex items-center justify-center text-xl card-hover active:scale-95 transition-transform">
           {avatar}
         </button>
       </div>

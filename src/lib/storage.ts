@@ -122,7 +122,10 @@ export function resetAllData(): void {
 
 // Helpers
 export function formatCurrency(amount: number): string {
-  return '₹ ' + amount.toLocaleString('en-IN');
+  if (amount === Math.floor(amount)) {
+    return '₹ ' + amount.toLocaleString('en-IN');
+  }
+  return '₹ ' + amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 export function formatDate(dateString: string): string {

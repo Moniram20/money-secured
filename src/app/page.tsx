@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { Transaction, Profile, TabType, DEFAULT_PROFILE, SAMPLE_TRANSACTIONS, CustomCategory, accentColors } from '@/lib/types';
-import { addTransaction, updateTransaction, deleteTransaction, getTransactions, getCustomCategories, getProfile } from '@/lib/storage';
+import { addTransaction, updateTransaction, deleteTransaction, getTransactions, getCustomCategories, getProfile, addCustomCategory } from '@/lib/storage';
 import HomePage from '@/components/money-tracker/HomePage';
 import StatsPage from '@/components/money-tracker/StatsPage';
 import AddTransactionModal from '@/components/money-tracker/AddTransactionModal';
@@ -104,6 +104,11 @@ export default function MoneySecuredApp() {
     setAppState(prev => ({ ...prev, customCategories: cats }));
   }, []);
 
+  const handleAddCustomCategoryFromModal = useCallback((cat: CustomCategory) => {
+    const updated = addCustomCategory(cat);
+    setAppState(prev => ({ ...prev, customCategories: updated }));
+  }, []);
+
   const handleResetAll = useCallback(() => {
     localStorage.removeItem('money_secured_transactions');
     localStorage.removeItem('money_secured_profile');
@@ -133,6 +138,7 @@ export default function MoneySecuredApp() {
               profile={profile}
               onEdit={handleEditTransaction}
               onDelete={handleDeleteTransaction}
+              onNavigateSettings={() => setActiveTab('settings')}
             />
           )}
           {activeTab === 'stats' && (
@@ -162,6 +168,7 @@ export default function MoneySecuredApp() {
           onUpdate={handleUpdateTransaction}
           editingTransaction={editingTransaction}
           customCategories={customCategories}
+          onAddCustomCategory={handleAddCustomCategoryFromModal}
         />
       </div>
     </div>
